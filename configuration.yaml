@@ -10,7 +10,17 @@ group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
+python_script:
 sensor:
     - platform: mqtt
-      state_topic: 'home/test/water'
-      name: 'Leak tester'
+      state_topic: '/brady/leak'
+      device: 
+        identifiers: "gronk"
+        via_device: "brady"
+      name: 'brady_leak'
+    - platform: mqtt
+      state_topic: '/brady/ping'
+      device: 
+        identifiers: "brady"
+      name: 'brady_ping'
+      expire_after: 120

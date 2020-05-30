@@ -14,3 +14,19 @@
   - data:
       message: hello
     service: notify.mobile_app_sm_g975u
+- id: '1590864795344'
+  alias: brady-unavailable
+  description: ''
+  trigger:
+  - entity_id: sensor.brady_ping
+    platform: state
+    to: unknown
+  condition: []
+  action:
+  - data:
+      message: brady is unavailable
+    service: notify.mobile_app_sm_g975u
+  - data_template:
+      entity_id: sensor.brady_leak
+      state: unknown
+    service: python_script.set_state
