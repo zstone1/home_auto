@@ -1,0 +1,16 @@
+- id: '1590801703221'
+  alias: Test Wet
+  description: ''
+  trigger:
+  - payload: wet
+    platform: mqtt
+    topic: home/test/water
+  condition: []
+  action:
+  - device_id: 54f2445bb86b4dd9b0145ee095cd8cb4
+    domain: switch
+    entity_id: switch.bedroom_lamp
+    type: turn_off
+  - data:
+      message: hello
+    service: notify.mobile_app_sm_g975u
