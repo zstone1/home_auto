@@ -1,0 +1,13 @@
+- platform: mqtt
+  state_topic: /home/brady/leak
+  name: brady leak
+  availability_topic: /home/brady/status   
+  payload_available: "online"
+  payload_not_available: "offline"
+
+- platform: mqtt
+  state_topic: /home/brees/leak
+  name: brees leak
+  availability_topic: /home/brees/status   
+  payload_available: "online"
+  payload_not_available: "offline"

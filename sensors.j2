@@ -1,0 +1,8 @@
+{%for pi in ["brady","brees"]%}
+- platform: mqtt
+  state_topic: /home/{{pi}}/leak
+  name: {{pi}} leak
+  availability_topic: /home/{{pi}}/status   
+  payload_available: "online"
+  payload_not_available: "offline"
+{%endfor%}
