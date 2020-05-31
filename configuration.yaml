@@ -11,16 +11,4 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 python_script:
-sensor:
-    - platform: mqtt
-      state_topic: '/brady/leak'
-      device: 
-        identifiers: "gronk"
-        via_device: "brady"
-      name: 'brady_leak'
-    - platform: mqtt
-      state_topic: '/brady/ping'
-      device: 
-        identifiers: "brady"
-      name: 'brady_ping'
-      expire_after: 120
+sensor: !include sensors.yaml
