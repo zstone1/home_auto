@@ -23,6 +23,11 @@ views:
     title: Home
   - badges: []
     cards:
+      - type: glance
+        title: Leak Detectors
+        entities: 
+          - entity: sensor.brady_leak
+          - entity: sensor.brees_leak
       - type: vertical-stack
         title: HVAC FIlter
         cards:
