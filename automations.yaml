@@ -1,32 +1,65 @@
-- id: '1590801703221'
-  alias: Test Wet
+- id: ccbd6ca549f34922abd2fe3892f234d1
+  alias: Leak Notifier
   description: ''
   trigger:
-  - payload: wet
-    platform: mqtt
-    topic: home/test/water
-  condition: []
-  action:
-  - device_id: 54f2445bb86b4dd9b0145ee095cd8cb4
-    domain: switch
-    entity_id: switch.bedroom_lamp
-    type: turn_off
-  - data:
-      message: hello
-    service: notify.mobile_app_sm_g975u
-- id: '1590864795344'
-  alias: brady-unavailable
-  description: ''
-  trigger:
-  - entity_id: sensor.brady_ping
+  - entity_id:
+    - sensor.brady_leak
+    - sensor.brees_leak
+    from: dry
     platform: state
-    to: unknown
+  condition: []
+  action:
+  - data_template:
+      message: 'Detector {{trigger.to_state.name.split(''.'')[0]}} is reporting {{trigger.to_state.state}}!'
+      title: 'Leak sensor: {{trigger.to_state.state}}'
+    service: notify.mobile_app_zphone
+- id: '1590891887225'
+  alias: Reinitialize Sensors
+  description: ''
+  trigger:
+  - event: start
+    platform: homeassistant
   condition: []
   action:
   - data:
-      message: brady is unavailable
-    service: notify.mobile_app_sm_g975u
-  - data_template:
-      entity_id: sensor.brady_leak
-      state: unknown
-    service: python_script.set_state
+      payload: ping
+      qos: 1
+      topic: /reinitialize
+    service: mqtt.publish
+- alias: Filter Replacement Alert
+  description: 'Sends notifications when the scheduled filter replacement date is greater than now'
+  trigger: 
+    - platform: time_pattern
+      seconds: '/3'
+  condition: 
+    condition: and
+    conditions: 
+      - condition: state
+        entity_id: person.zachary_stone
+        state: home
+      - condition: time
+        after: '11:00:00'
+        before: '21:00:00'
+      - condition: template
+        value_template: '{{(to_timestamp(trigger.now) | Int) > (state_attr("input_datetime.filter_replacement", "timestamp") | Int) }}'
+  action: 
+  - service: notify.mobile_app_zphone
+    data:
+      title: 'Filter needs to be replaced'
+      message: 'Fix it now, or punt?'
+      data: 
+        actions:
+        - action: "filter" 
+          title: "Punt" 
+        - action: "filter" 
+          title: "Replace"  
+- alias: Handle Filter Event
+  trigger:
+    - platform: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: filter
+  action:
+    - service: script.extend_filter_replacement
+      data_template:
+        days: 2 

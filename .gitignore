@@ -1,6 +1,7 @@
 # Example .gitignore file for your config dir.
 # Ignore folders.
 *.swp
+*.swo
 .storage
 .cloud
 .google.token

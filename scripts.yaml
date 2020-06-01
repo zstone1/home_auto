@@ -1,0 +1,15 @@
+extend_filter_replacement:
+  alias: Extend Filter Replacement
+  description: 'Set the filter replacement time to some number of days in the future'
+  fields:
+    days:
+      description: 'Number of days until filter notification'
+      example: 90
+  sequence:
+    # This is Home Assistant Script Syntax
+    - alias: Extend Filter Alert
+      service: input_datetime.set_datetime
+      # supports seconds, milliseconds, minutes, hours
+      entity_id: input_datetime.filter_replacement        
+      data_template:
+        date: "{{ as_timestamp(now()) + (24*3600) | timestamp_custom('%Y-%m-%d') }}"
