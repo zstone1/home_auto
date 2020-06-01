@@ -12,3 +12,5 @@ script: !include scripts.yaml
 scene: !include scenes.yaml
 python_script:
 sensor: !include sensors.yaml
+lovelace: 
+  mode: yaml

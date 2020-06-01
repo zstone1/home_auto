@@ -1,0 +1,65 @@
+title: Home
+views:
+  - badges:
+      - entity: person.zachary_stone
+      - entity: sensor.zphone_battery_level
+      - entity: sensor.zphone_battery_state
+      - entity: sensor.zphone_wifi_connection
+    cards:
+      - entities:
+          - entity: switch.bedroom_lamp
+        title: Switch
+        type: entities
+      - entity: weather.home
+        type: weather-forecast
+      - entities:
+          - entity: sensor.brady_leak
+          - entity: sensor.brees_leak
+        title: Leaks
+        type: entities
+      - entities:
+          - entity: input_datetime.filter_replacement
+        type: glance
+    title: Home
+  - badges: []
+    cards:
+      - type: vertical-stack
+        title: HVAC FIlter
+        cards:
+          - type: markdown
+            content: |-
+                <font size="6"> <center> Days until replacement:  {{(((state_attr(
+                   'input_datetime.filter_replacement',
+                   'timestamp') | int) - 
+                (now().timestamp() | int))
+                /60/60/24) | int }}
+                </center> </font>
+            style:
+              text-align: center
+          - type: glance
+            entities: 
+              - entity: input_datetime.filter_replacement
+            show_name: false
+
+          - type: horizontal-stack
+            cards: 
+            - type: button
+              icon: 'mdi:update'
+              name: Replace Now
+              tap_action: 
+                action: call-service
+                service: script.filter_replacement_now
+              icon_height: 20px
+            - type: button
+              icon: 'mdi:football'
+              name: Punt
+              tap_action: 
+                action: call-service
+                service: script.filter_replacement_punt
+              icon_height: 20px
+    panel: false
+    path: home-maintenence
+    title: Maintenance
+resources:
+  - url: /local/vertical-stack-in-card.js?v=0.3.2
+    type: js

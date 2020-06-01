@@ -1,15 +1,38 @@
-extend_filter_replacement:
-  alias: Extend Filter Replacement
-  description: 'Set the filter replacement time to some number of days in the future'
+extend_filter_replacement_aux:
+  alias: Extend Filter Replacement Aux
+  description: Set the filter replacement time to some number of days in the future
   fields:
     days:
-      description: 'Number of days until filter notification'
+      description: Number of days until filter notification
       example: 90
+    log_msg:
+      description: Description of what has happened
+      example: 'Filter Replaced '
   sequence:
-    # This is Home Assistant Script Syntax
-    - alias: Extend Filter Alert
-      service: input_datetime.set_datetime
-      # supports seconds, milliseconds, minutes, hours
-      entity_id: input_datetime.filter_replacement        
-      data_template:
-        date: "{{ as_timestamp(now()) + (24*3600) | timestamp_custom('%Y-%m-%d') }}"
+  - alias: Update Log
+    service: logbook.log
+    data_template:
+      name: HVAC Filter
+      message: '{{log_msg}}'
+  - alias: Extend Filter Alert
+    service: input_datetime.set_datetime
+    entity_id: input_datetime.filter_replacement
+    data_template:
+      date: "{{(((now().timestamp() | int) +  \n    (days * 24 * 60 * 60 | int)) \n\
+        \    | timestamp_custom('%Y-%m-%d'))}}\n"
+filter_replacement_punt:
+  alias: Filter Replacement Punt
+  sequence:
+  - alias: Extend 2 Days
+    service: script.extend_filter_replacement_aux
+    data_template:
+      days: 2
+      log_msg: Delayed replacement by a couple days.
+filter_replacement_now:
+  alias: Filter Replacement Now
+  sequence:
+  - alias: Extend 90 Days
+    data_template:
+      days: 90
+      log_msg: Replaced Filter.
+    service: script.extend_filter_replacement_aux

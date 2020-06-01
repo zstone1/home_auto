@@ -30,7 +30,7 @@
   description: 'Sends notifications when the scheduled filter replacement date is greater than now'
   trigger: 
     - platform: time_pattern
-      seconds: '/3'
+      seconds: '/9'
   condition: 
     condition: and
     conditions: 
@@ -41,7 +41,7 @@
         after: '11:00:00'
         before: '21:00:00'
       - condition: template
-        value_template: '{{(to_timestamp(trigger.now) | Int) > (state_attr("input_datetime.filter_replacement", "timestamp") | Int) }}'
+        value_template: "{{(now().timestamp() | int) > (state_attr('input_datetime.filter_replacement','timestamp') | int)}}"
   action: 
   - service: notify.mobile_app_zphone
     data:
@@ -49,17 +49,25 @@
       message: 'Fix it now, or punt?'
       data: 
         actions:
-        - action: "filter" 
+        - action: "filter.punt" 
           title: "Punt" 
-        - action: "filter" 
+        - action: "filter.replace" 
           title: "Replace"  
-- alias: Handle Filter Event
+- alias: Handle Filter Punt
   trigger:
     - platform: event
       event_type: mobile_app_notification_action
       event_data:
-        action: filter
+        action: filter.punt
   action:
-    - service: script.extend_filter_replacement
-      data_template:
-        days: 2 
+    - service:  script.filter_replacement_punt
+
+- alias: Handle Filter Replace
+  trigger:
+    - platform: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: filter.replace
+  action:
+    - service: script.filter_replacement_now
+  
