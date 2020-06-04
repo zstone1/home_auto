@@ -13,11 +13,22 @@
   payload_not_available: "offline"
 
 - platform: mqtt
-  state_topic: /home/brady/temp
-  name: brady temp
+  state_topic: /home/brady/climate
+  name: brady temperature
   availability_topic: /home/brady/status   
   payload_available: "online"
   payload_not_available: "offline"
+  value_template: "{{value_json.temperature}}"
+  device_class: temperature
+
+- platform: mqtt
+  state_topic: /home/brady/climate
+  name: brady humidity
+  availability_topic: /home/brady/status   
+  payload_available: "online"
+  payload_not_available: "offline"
+  value_template: "{{value_json.humidity}}"
+  device_class: humidity
 
 
 
@@ -36,12 +47,22 @@
   payload_not_available: "offline"
 
 - platform: mqtt
-  state_topic: /home/brees/temp
-  name: brees temp
+  state_topic: /home/brees/climate
+  name: brees temperature
   availability_topic: /home/brees/status   
   payload_available: "online"
   payload_not_available: "offline"
+  value_template: "{{value_json.humidity}}"
+  device_class: temperature
 
+- platform: mqtt
+  state_topic: /home/brees/climate
+  name: brees humidity
+  availability_topic: /home/brees/status   
+  payload_available: "online"
+  payload_not_available: "offline"
+  value_template: "{{value_json.humidity}}"
+  device_class: humidity
 - platform: command_line
   name: CPU Temperature
   command: "cat /sys/class/thermal/thermal_zone0/temp"

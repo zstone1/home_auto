@@ -1,12 +1,26 @@
 {%for pi in ["brady","brees"]%}
-{%for sense in ["leak", "pir", "temp"]%}
+{%for sense in [
+  {"name": "leak",
+   "topic": "leak"}, 
+  {"name": "pir",
+   "topic": "pir"}, 
+  {"name":"temperature",
+   "topic":"climate",
+   "template": "{{value_json.temperature}}",
+   "class": "temperature"},
+  {"name" : "humidity",
+   "topic": "climate",
+   "class": "humidity",
+   "template": "{{value_json.humidity}}"
+  }]%}
 - platform: mqtt
-  state_topic: /home/{{pi}}/{{sense}}
-  name: {{pi}} {{sense}}
+  state_topic: /home/{{pi}}/{{sense.topic}}
+  name: {{pi}} {{sense.name}}
   availability_topic: /home/{{pi}}/status   
   payload_available: "online"
-  payload_not_available: "offline"
-
+  payload_not_available: "offline"{%if sense.template %}
+  value_template: "{{sense.template}}"{%endif%}{%if sense.class %}
+  device_class: {{sense.class}}{%endif%}
 {%endfor%}
 {%endfor%}
 

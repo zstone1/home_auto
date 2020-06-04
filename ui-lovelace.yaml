@@ -20,6 +20,12 @@ views:
       - entities:
           - entity: input_datetime.filter_replacement
         type: glance
+      - type: entities
+        title: Climate
+        entities:
+          - entity: sensor.brady_temp
+            icon: mdi:thermometer
+        
     title: Home
   - badges: []
     cards:

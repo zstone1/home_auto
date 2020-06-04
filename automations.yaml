@@ -9,9 +9,10 @@
   condition: []
   action:
   - data_template:
-      message: 'Detector {{trigger.to_state.name.split(''.'')[0]}} is reporting {{trigger.to_state.state}}!'
+      message: Detector {{trigger.to_state.name.split('.')[0]}} is reporting {{trigger.to_state.state}}!
       title: 'Leak sensor: {{trigger.to_state.state}}'
     service: notify.mobile_app_zphone
+  id: c299d2ad88b341a0974bd85ed41d12bd
 - alias: Bootup Initializers
   description: ''
   trigger:
@@ -19,55 +20,72 @@
     platform: homeassistant
   condition: []
   action:
-    - data:
-        payload: ping
-        qos: 1
-        topic: /reinitialize
-      service: mqtt.publish
-    - service: cloud.remote_connect
+  - data:
+      payload: ping
+      qos: 1
+      topic: /reinitialize
+    service: mqtt.publish
+  - service: cloud.remote_connect
+  id: c26cbb64880a44919e67ee97393156bf
 - alias: Filter Replacement Alert
-  description: 'Sends notifications when the scheduled filter replacement date is greater than now'
-  trigger: 
-    - platform: time_pattern
-      seconds: '00'
-      minutes: '30'
-  condition: 
+  description: Sends notifications when the scheduled filter replacement date is greater
+    than now
+  trigger:
+  - platform: time_pattern
+    seconds: '00'
+    minutes: '30'
+  condition:
     condition: and
-    conditions: 
-      - condition: state
-        entity_id: person.zachary_stone
-        state: home
-      - condition: time
-        after: '11:00:00'
-        before: '21:00:00'
-      - condition: template
-        value_template: "{{(now().timestamp() | int) > (state_attr('input_datetime.filter_replacement','timestamp') | int)}}"
-  action: 
+    conditions:
+    - condition: state
+      entity_id: person.zachary_stone
+      state: home
+    - condition: time
+      after: '11:00:00'
+      before: '21:00:00'
+    - condition: template
+      value_template: '{{(now().timestamp() | int) > (state_attr(''input_datetime.filter_replacement'',''timestamp'')
+        | int)}}'
+  action:
   - service: notify.mobile_app_zphone
     data:
-      title: 'Filter needs to be replaced'
-      message: 'Fix it now, or punt?'
-      data: 
+      title: Filter needs to be replaced
+      message: Fix it now, or punt?
+      data:
         actions:
-        - action: "filter.punt" 
-          title: "Punt" 
-        - action: "filter.replace" 
-          title: "Replace"  
+        - action: filter.punt
+          title: Punt
+        - action: filter.replace
+          title: Replace
+  id: 99926e7ec23b455d9213e41549ddd02b
 - alias: Handle Filter Punt
   trigger:
-    - platform: event
-      event_type: mobile_app_notification_action
-      event_data:
-        action: filter.punt
+  - platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: filter.punt
   action:
-    - service:  script.filter_replacement_punt
-
+  - service: script.filter_replacement_punt
+  id: 86c5116675024516990133c5fc938c7d
 - alias: Handle Filter Replace
   trigger:
-    - platform: event
-      event_type: mobile_app_notification_action
-      event_data:
-        action: filter.replace
+  - platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: filter.replace
   action:
-    - service: script.filter_replacement_now
-  
+  - service: script.filter_replacement_now
+  id: 8817ea4069d44c18bc88ea0aaacf5bd3
+- id: '1591232432136'
+  alias: New Automation
+  description: ''
+  trigger:
+  - payload: detected
+    platform: mqtt
+    topic: /home/brady/pir
+  condition: []
+  action:
+  - device_id: 54f2445bb86b4dd9b0145ee095cd8cb4
+    domain: switch
+    entity_id: switch.bedroom_lamp
+    type: turn_on
