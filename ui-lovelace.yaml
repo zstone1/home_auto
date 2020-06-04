@@ -32,8 +32,9 @@ views:
         title: HVAC FIlter
         cards:
           - type: markdown
+            title: Days Until Replacement
             content: |-
-                <font size="6"> <center> Days until replacement:  {{(((state_attr(
+                <font size="6"> <center> {{(((state_attr(
                    'input_datetime.filter_replacement',
                    'timestamp') | int) - 
                 (now().timestamp() | int))
@@ -65,6 +66,120 @@ views:
     panel: false
     path: home-maintenence
     title: Maintenance
+  - badges: 
+    title: Server Status
+    cards: 
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: entities
+            title: Server Pi
+            show_header_toggle: false
+            entities:
+              - entity: sensor.last_boot
+                name: Last boot
+                icon: mdi:clock
+          - type: horizontal-stack
+            cards:
+              - type: custom:mini-graph-card
+                entities:
+                  - entity: sensor.processor_use
+                    name: CPU
+                points_per_hour: 60
+                hours_to_show: 2
+                icon: mdi:memory
+                show:
+                  labels: true
+                  extrema: true                
+                color_thresholds:
+                  - value: 0
+                    color: '#40bf40'
+                  - value: 10
+                    color: '#ffde00'
+                  - value: 50
+                    color: '#bf4040'
+              - type: custom:mini-graph-card
+                entities:
+                  - entity: sensor.rpi_cpu_temperature
+                    name: CPU Temperature
+                points_per_hour: 60
+                hours_to_show: 2
+                decimals: 0
+                show:
+                  labels: true
+                  extrema: true 
+                color_thresholds:
+                  - value: 0
+                    color: '#cccccc'
+                  - value: 45
+                    color: '#ffde00'
+                  - value: 65
+                    color: '#bf4040'
+
+          - type: custom:multiple-entity-row
+            name: RPi I/O
+            show_state: false
+            icon: mdi:router-wireless
+            entity: sensor.network_in_eth0
+            entities:
+              - entity: sensor.network_in_eth0
+                name: Kbyte Received
+              - entity: sensor.network_out_eth0
+                name: Kbyte Sent
+              
+          - type: custom:bar-card
+            entities:
+              - entity: sensor.disk_use_percent_home
+                icon: mdi:harddisk
+                title: HDD
+                severity:
+                - value: 50
+                  color: '#40bf40'
+                - value: 80
+                  color: '#ffde00'
+                - value: 100
+                  color: '#bf4040'
+              - entity: sensor.memory_use_percent
+                icon: mdi:memory
+                title: RAM
+                severity:
+                - value: 20
+                  color: '#40bf40'
+                - value: 50
+                  color: 'var(--primary-color)'
+                - value: 100
+                  color: '#bf4040'
+            height: 40px
+            columns: 1
+            entity_config: true
+            show_icon: true
+            title_position: inside
+            # title_position: 'off'
+            align: split
+            rounding: 5px
+            padding: 5px
+            background_style:
+              background: "#000"
+              opacity: 0.05
+            icon_style:
+              height: 34px
+              width: 34px
+              filter: "none"
+            value_style:
+              text-shadow: "none"
+              font-size: "18px"
+              font-weight: "normal"
+              color: "var(--primary-text-color)"
+            title_style:
+              text-shadow: "none"
+              color: "var(--primary-text-color)"
+              # color: "#fff"
+              font-weight: "normal"
 resources:
-  - url: /local/vertical-stack-in-card.js?v=0.3.2
-    type: js
+  - type: module
+    url: /hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js
+  - type: module 
+    url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
+  - type: module
+    url: /hacsfiles/bar-card/bar-card.js
+  - type: module 
+    url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js

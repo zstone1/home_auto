@@ -6,8 +6,53 @@
   payload_not_available: "offline"
 
 - platform: mqtt
+  state_topic: /home/brady/pir
+  name: brady pir
+  availability_topic: /home/brady/status   
+  payload_available: "online"
+  payload_not_available: "offline"
+
+- platform: mqtt
+  state_topic: /home/brady/temp
+  name: brady temp
+  availability_topic: /home/brady/status   
+  payload_available: "online"
+  payload_not_available: "offline"
+
+
+
+- platform: mqtt
   state_topic: /home/brees/leak
   name: brees leak
   availability_topic: /home/brees/status   
   payload_available: "online"
   payload_not_available: "offline"
+
+- platform: mqtt
+  state_topic: /home/brees/pir
+  name: brees pir
+  availability_topic: /home/brees/status   
+  payload_available: "online"
+  payload_not_available: "offline"
+
+- platform: mqtt
+  state_topic: /home/brees/temp
+  name: brees temp
+  availability_topic: /home/brees/status   
+  payload_available: "online"
+  payload_not_available: "offline"
+
+
+
+- platform: systemmonitor
+  resources:
+    - type: disk_use_percent
+      arg: /home
+    - type: memory_use
+    - type: memory_use_percent
+    - type: processor_use
+    - type: last_boot
+    - type: network_in
+      arg: eth0
+    - type: network_out
+      arg: eth0

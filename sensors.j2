@@ -1,8 +1,24 @@
 {%for pi in ["brady","brees"]%}
+{%for sense in ["leak", "pir", "temp"]%}
 - platform: mqtt
-  state_topic: /home/{{pi}}/leak
-  name: {{pi}} leak
+  state_topic: /home/{{pi}}/{{sense}}
+  name: {{pi}} {{sense}}
   availability_topic: /home/{{pi}}/status   
   payload_available: "online"
   payload_not_available: "offline"
+
 {%endfor%}
+{%endfor%}
+
+- platform: systemmonitor
+  resources:
+    - type: disk_use_percent
+      arg: /home
+    - type: memory_use
+    - type: memory_use_percent
+    - type: processor_use
+    - type: last_boot
+    - type: network_in
+      arg: eth0
+    - type: network_out
+      arg: eth0

@@ -1,5 +1,4 @@
-- id: ccbd6ca549f34922abd2fe3892f234d1
-  alias: Leak Notifier
+- alias: Leak Notifier
   description: ''
   trigger:
   - entity_id:
@@ -13,24 +12,25 @@
       message: 'Detector {{trigger.to_state.name.split(''.'')[0]}} is reporting {{trigger.to_state.state}}!'
       title: 'Leak sensor: {{trigger.to_state.state}}'
     service: notify.mobile_app_zphone
-- id: '1590891887225'
-  alias: Reinitialize Sensors
+- alias: Bootup Initializers
   description: ''
   trigger:
   - event: start
     platform: homeassistant
   condition: []
   action:
-  - data:
-      payload: ping
-      qos: 1
-      topic: /reinitialize
-    service: mqtt.publish
+    - data:
+        payload: ping
+        qos: 1
+        topic: /reinitialize
+      service: mqtt.publish
+    - service: cloud.remote_connect
 - alias: Filter Replacement Alert
   description: 'Sends notifications when the scheduled filter replacement date is greater than now'
   trigger: 
     - platform: time_pattern
-      seconds: '/9'
+      seconds: '00'
+      minutes: '30'
   condition: 
     condition: and
     conditions: 
