@@ -13,8 +13,9 @@ views:
       - entity: weather.home
         type: weather-forecast
       - entities:
-          - entity: sensor.brady_leak
-          - entity: sensor.brees_leak
+          - entity: sensor.dishwasher_leak
+          - entity: sensor.disposal_leak
+          - entity: sensor.washing_machine_leak
         title: Leaks
         type: entities
       - entities:
@@ -23,16 +24,19 @@ views:
       - type: entities
         title: Climate
         entities:
-          - entity: sensor.brady_temperature
-          - entity: sensor.brady_humidity
+          - entity: sensor.kitchen_temperature
+          - entity: sensor.kitchen_humidity
+          - entity: sensor.office_temperature
+          - entity: sensor.office_humidity
     title: Home
   - badges: []
     cards:
       - type: glance
         title: Leak Detectors
         entities: 
-          - entity: sensor.brady_leak
-          - entity: sensor.brees_leak
+          - entity: sensor.dishwasher_leak
+          - entity: sensor.disposal_leak
+          - entity: sensor.washing_machine_leak
       - type: vertical-stack
         title: HVAC FIlter
         cards:

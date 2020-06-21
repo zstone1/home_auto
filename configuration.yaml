@@ -12,5 +12,11 @@ script: !include scripts.yaml
 scene: !include scenes.yaml
 python_script:
 sensor: !include sensors.yaml
+binary_sensor:
+  - platform: ping
+    name: local_router_connectivity
+    host: 10.0.0.1
+    count: 2
+    scan_interval: 2
 lovelace: 
   mode: yaml

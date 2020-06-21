@@ -1,18 +1,19 @@
-- alias: Leak Notifier
+- id: c299d2ad88b341a0974bd85ed41d12bd
+  alias: Leak Notifier
   description: ''
   trigger:
   - entity_id:
-    - sensor.brady_leak
-    - sensor.brees_leak
-    from: dry
+    - sensor.disposal_leak
+    - sensor.dishwasher_leak
+    - sensor.washing_machine_leak
     platform: state
+    from: dry
   condition: []
   action:
   - data_template:
       message: Detector {{trigger.to_state.name.split('.')[0]}} is reporting {{trigger.to_state.state}}!
       title: 'Leak sensor: {{trigger.to_state.state}}'
     service: notify.mobile_app_zphone
-  id: c299d2ad88b341a0974bd85ed41d12bd
 - alias: Bootup Initializers
   description: ''
   trigger:
@@ -77,15 +78,35 @@
   - service: script.filter_replacement_now
   id: 8817ea4069d44c18bc88ea0aaacf5bd3
 - id: '1591232432136'
-  alias: New Automation
+  alias: Bedroom Light Motion
   description: ''
   trigger:
   - payload: detected
     platform: mqtt
     topic: /home/brady/pir
-  condition: []
+  condition:
+  - condition: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 12 }}'
+  - after: '12:00'
+    before: '23:49'
+    condition: time
   action:
   - device_id: 54f2445bb86b4dd9b0145ee095cd8cb4
     domain: switch
     entity_id: switch.bedroom_lamp
     type: turn_on
+- id: '1591453666780'
+  alias: Router Connectivity Failure
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.local
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      message: Lost Connection to local router
+      name: Connection Lost
+    entity_id: binary_sensor.local
+    service: logbook.log
