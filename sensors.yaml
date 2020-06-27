@@ -57,7 +57,7 @@
 
 - platform: mqtt
   state_topic: /home/brees/climate
-  name: Office Temperature
+  name: HVAC Output Temperature
   availability_topic: /home/brees/status   
   payload_available: "online"
   payload_not_available: "offline"
@@ -67,7 +67,7 @@
 
 - platform: mqtt
   state_topic: /home/brees/climate
-  name: Office Humidity
+  name: HVAC Output Humidity
   availability_topic: /home/brees/status   
   payload_available: "online"
   payload_not_available: "offline"
