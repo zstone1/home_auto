@@ -16,6 +16,7 @@ views:
           - entity: sensor.dishwasher_leak
           - entity: sensor.disposal_leak
           - entity: sensor.washing_machine_leak
+          - entity: sensor.condensation_pump_leak
         title: Leaks
         type: entities
       - entities:
@@ -28,6 +29,8 @@ views:
           - entity: sensor.kitchen_humidity
           - entity: sensor.office_temperature
           - entity: sensor.office_humidity
+          - entity: sensor.hvac_intake_temperature
+          - entity: sensor.hvac_intake_humidity
     title: Home
   - badges: []
     cards:
@@ -37,6 +40,7 @@ views:
           - entity: sensor.dishwasher_leak
           - entity: sensor.disposal_leak
           - entity: sensor.washing_machine_leak
+          - entity: sensor.condensation_pump_leak
       - type: vertical-stack
         title: HVAC FIlter
         cards:
