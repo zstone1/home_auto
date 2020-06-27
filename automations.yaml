@@ -1,20 +1,23 @@
 - id: c299d2ad88b341a0974bd85ed41d12bd
-  alias: Leak Notifier
+  alias: Leak Unavailable
   description: ''
   trigger:
   - entity_id:
     - sensor.disposal_leak
     - sensor.dishwasher_leak
     - sensor.washing_machine_leak
+    - sensor.condensation_pump_leak
+    for: 00:00:30
     platform: state
-    from: dry
+    to: unavailable
   condition: []
   action:
   - data_template:
       message: Detector {{trigger.to_state.name.split('.')[0]}} is reporting {{trigger.to_state.state}}!
-      title: 'Leak sensor: {{trigger.to_state.state}}'
+      title: Leak sensor unavailable
     service: notify.mobile_app_zphone
-- alias: Bootup Initializers
+- id: c26cbb64880a44919e67ee97393156bf
+  alias: Bootup Initializers
   description: ''
   trigger:
   - event: start
@@ -26,8 +29,6 @@
       qos: 1
       topic: /reinitialize
     service: mqtt.publish
-  - service: cloud.remote_connect
-  id: c26cbb64880a44919e67ee97393156bf
 - alias: Filter Replacement Alert
   description: Sends notifications when the scheduled filter replacement date is greater
     than now
@@ -110,3 +111,20 @@
       name: Connection Lost
     entity_id: binary_sensor.local
     service: logbook.log
+- id: '1593294703590'
+  alias: Leak Detected
+  description: ''
+  trigger:
+  - entity_id:
+    - sensor.disposal_leak
+    - sensor.dishwasher_leak
+    - sensor.washing_machine_leak
+    - sensor.condensation_pump_leak
+    platform: state
+    to: wet
+  condition: []
+  action:
+  - data_template:
+      message: Detector {{trigger.to_state.name.split('.')[0]}} is reporting {{trigger.to_state.state}}!
+      title: Leak Detected!
+    service: notify.mobile_app_zphone
