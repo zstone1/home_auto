@@ -18,5 +18,13 @@ binary_sensor:
     host: 10.0.0.1
     count: 2
     scan_interval: 2
+  - platform: wyzesense
+    device: "/dev/hidraw0"
 lovelace: 
   mode: yaml
+
+logger:
+  default: info
+  logs:
+    custom_components.wyzesense: debug
+    wyzesense.gateway: debug

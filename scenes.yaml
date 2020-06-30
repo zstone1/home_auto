@@ -1,0 +1,6 @@
+- id: '1593312089522'
+  name: bedtime
+  entities:
+    switch.bedroom_lamp:
+      friendly_name: bedroom lamp
+      state: 'off'

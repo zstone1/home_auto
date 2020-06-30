@@ -84,13 +84,13 @@
   trigger:
   - payload: detected
     platform: mqtt
-    topic: /home/brady/pir
+    topic: /home/wilson/pir
   condition:
   - condition: template
     value_template: '{{ state_attr("sun.sun", "elevation") < 12 }}'
-  - after: '12:00'
-    before: '23:49'
-    condition: time
+  - condition: state
+    entity_id: input_boolean.bedtime
+    state: 'off'
   action:
   - device_id: 54f2445bb86b4dd9b0145ee095cd8cb4
     domain: switch
@@ -128,3 +128,43 @@
       message: Detector {{trigger.to_state.name.split('.')[0]}} is reporting {{trigger.to_state.state}}!
       title: Leak Detected!
     service: notify.mobile_app_zphone
+- id: '1593310193877'
+  alias: Set Bedtime
+  description: Sets the bedtime flag automatically at night when I've gone to bed
+  trigger:
+  - entity_id: sensor.zphone_battery_state
+    for: 00:30:00
+    platform: state
+    to: charging
+  - entity_id: sensor.zphone_battery_state
+    for: '"00:30:00"'
+    platform: state
+    to: Full
+  condition:
+  - after: '22:00'
+    before: 06:00
+    condition: time
+  - condition: device
+    device_id: 54f2445bb86b4dd9b0145ee095cd8cb4
+    domain: switch
+    entity_id: switch.bedroom_lamp
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+    type: is_off
+  action:
+  - data: {}
+    entity_id: input_boolean.bedtime
+    service: input_boolean.turn_on
+- id: '1593312256950'
+  alias: bedtime scene
+  description: ''
+  trigger:
+  - entity_id: input_boolean.bedtime
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - scene: scene.bedtime

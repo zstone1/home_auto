@@ -8,6 +8,7 @@ views:
     cards:
       - entities:
           - entity: switch.bedroom_lamp
+          - entity: input_boolean.bedtime
         title: Switch
         type: entities
       - entity: weather.home
@@ -27,8 +28,12 @@ views:
         entities:
           - entity: sensor.kitchen_temperature
           - entity: sensor.kitchen_humidity
-          - entity: sensor.office_temperature
-          - entity: sensor.office_humidity
+          - entity: sensor.hvac_output_temperature
+          # the dht22 gives a crazy high humidity reading, I 
+          # believe because the unit itself is so cold it's
+          # drawing consensation in it's circuity
+          # TODO: fix that or remove this sensor. 
+          - entity: sensor.hvac_output_humidity
           - entity: sensor.hvac_intake_temperature
           - entity: sensor.hvac_intake_humidity
     title: Home
@@ -196,3 +201,7 @@ resources:
     url: /hacsfiles/bar-card/bar-card.js
   - type: module 
     url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
+  - type: module
+    url: /hacsfiles/lovelace-slider-entity-row/slider-entity-row.js
+  - type: module 
+    url: /hacsfiles/button-card/button-card.js
