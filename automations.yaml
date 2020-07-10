@@ -87,7 +87,7 @@
     topic: /home/wilson/pir
   condition:
   - condition: template
-    value_template: '{{ state_attr("sun.sun", "elevation") < 12 }}'
+    value_template: '{{ state_attr("sun.sun", "elevation") < 8 }}'
   - condition: state
     entity_id: input_boolean.bedtime
     state: 'off'
@@ -168,3 +168,63 @@
   condition: []
   action:
   - scene: scene.bedtime
+  - data:
+      preset_mode: Sleep
+    entity_id: climate.my_ecobee
+    service: climate.set_preset_mode
+- id: '1593577167509'
+  alias: Woken Up
+  description: Turns off bedtime when I'm using my phone
+  trigger:
+  - entity_id: sensor.zphone_battery_state
+    for: 00:05:00
+    platform: state
+    to: discharging
+  condition:
+  - after: '7:00'
+    before: '17:00'
+    condition: time
+  action:
+  - data: {}
+    entity_id: input_boolean.bedtime
+    service: input_boolean.turn_off
+  - data:
+      preset_mode: Home
+    entity_id: climate.my_ecobee
+    service: climate.set_preset_mode
+- id: '1593822612999'
+  alias: Evening Living Room Lights
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.wyzesense_7794df66
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: input_boolean.bedtime
+    state: 'off'
+  - condition: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 8}}'
+  action:
+  - brightness_pct: 75
+    device_id: 01ecfb4342154db19cca643b0c446e5c
+    domain: light
+    entity_id: light.living_room_lights
+    type: turn_on
+- id: '1593822911752'
+  alias: Night Time Living Room Lights
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.wyzesense_7794df66
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: input_boolean.bedtime
+    state: 'on'
+  action:
+  - brightness_pct: 1
+    device_id: 21cbee5b16494885b768d46c338a3d0a
+    domain: light
+    entity_id: light.living_room_lights
+    type: turn_on

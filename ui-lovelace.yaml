@@ -6,36 +6,24 @@ views:
       - entity: sensor.zphone_battery_state
       - entity: sensor.zphone_wifi_connection
     cards:
+      - type: thermostat
+        entity: climate.my_ecobee
       - entities:
           - entity: switch.bedroom_lamp
           - entity: input_boolean.bedtime
+          - type: custom:slider-entity-row
+            entity: light.living_room_lights
         title: Switch
         type: entities
       - entity: weather.home
         type: weather-forecast
-      - entities:
-          - entity: sensor.dishwasher_leak
-          - entity: sensor.disposal_leak
-          - entity: sensor.washing_machine_leak
-          - entity: sensor.condensation_pump_leak
-        title: Leaks
-        type: entities
-      - entities:
-          - entity: input_datetime.filter_replacement
-        type: glance
       - type: entities
-        title: Climate
+        title: Temperatures
         entities:
           - entity: sensor.kitchen_temperature
           - entity: sensor.kitchen_humidity
-          - entity: sensor.hvac_output_temperature
-          # the dht22 gives a crazy high humidity reading, I 
-          # believe because the unit itself is so cold it's
-          # drawing consensation in it's circuity
-          # TODO: fix that or remove this sensor. 
-          - entity: sensor.hvac_output_humidity
-          - entity: sensor.hvac_intake_temperature
-          - entity: sensor.hvac_intake_humidity
+          - entity: sensor.bedroom_temperature
+          - entity: sensor.bedroom_humidity
     title: Home
   - badges: []
     cards:
@@ -46,8 +34,23 @@ views:
           - entity: sensor.disposal_leak
           - entity: sensor.washing_machine_leak
           - entity: sensor.condensation_pump_leak
+      
+      - type: history-graph
+        title: 'HVAC Efficiency'
+        hours_to_show: 1
+        entities:
+          - entity: sensor.hvac_output_temperature
+            name: output
+          - entity: sensor.hvac_intake_temperature
+            name: inttake
+          # the dht22 gives a crazy high humidity reading, I 
+          # believe because the unit itself is so cold it's
+          # drawing consensation in it's circuity
+          # TODO: fix that or remove this sensor. 
+          # - entity: sensor.hvac_output_humidity
+          # - entity: sensor.hvac_intake_humidity
       - type: vertical-stack
-        title: HVAC FIlter
+        title: HVAC Filter
         cards:
           - type: markdown
             title: Days Until Replacement

@@ -1,6 +1,10 @@
 - id: '1593312089522'
   name: bedtime
   entities:
+    light.living_room_lights:
+      friendly_name: Living Room Lights
+      state: 'off'
+      supported_features: 1
     switch.bedroom_lamp:
       friendly_name: bedroom lamp
       state: 'off'
