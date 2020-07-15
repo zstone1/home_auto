@@ -92,7 +92,7 @@
     entity_id: input_boolean.bedtime
     state: 'off'
   action:
-  - device_id: 54f2445bb86b4dd9b0145ee095cd8cb4
+  - device_id: bfaf6012d1764219ae6a3c865d7d03e6
     domain: switch
     entity_id: switch.bedroom_lamp
     type: turn_on
@@ -206,11 +206,10 @@
   - condition: template
     value_template: '{{ state_attr("sun.sun", "elevation") < 8}}'
   action:
-  - brightness_pct: 75
-    device_id: 01ecfb4342154db19cca643b0c446e5c
+  - device_id: a480d205dacb4755900ad0052cdb8c31
     domain: light
     entity_id: light.living_room_lights
-    type: turn_on
+    type: turn_off
 - id: '1593822911752'
   alias: Night Time Living Room Lights
   description: ''
@@ -224,7 +223,55 @@
     state: 'on'
   action:
   - brightness_pct: 1
-    device_id: 21cbee5b16494885b768d46c338a3d0a
+    device_id: a480d205dacb4755900ad0052cdb8c31
     domain: light
     entity_id: light.living_room_lights
     type: turn_on
+- id: '1594411592592'
+  alias: First Floor Exhaust Shutoff
+  description: Turns off the bathroom exhaust on a timer fans when the lights go off.
+  trigger:
+  - device_id: 88329ae2c1bc4da0a2062a973ab06aaf
+    domain: switch
+    entity_id: switch.first_floor_bath_light
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+    platform: device
+    type: turned_off
+  condition:
+  - condition: device
+    device_id: 5149ce3fa0184911859a1e6d5acffca2
+    domain: switch
+    entity_id: switch.first_floor_bath_exhaust
+    type: is_on
+  action:
+  - device_id: 5149ce3fa0184911859a1e6d5acffca2
+    domain: switch
+    entity_id: switch.first_floor_bath_exhaust
+    type: turn_off
+- id: '1594411595486'
+  alias: Second Floor Exhaust Shutoff
+  description: Turns off the bathroom exhaust on a timer fans when the lights go off.
+  trigger:
+  - device_id: 4d39381c5ba140de9144d2a5964d4339
+    domain: switch
+    entity_id: switch.second_floor_bath_light
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+    platform: device
+    type: turned_off
+  condition:
+  - condition: device
+    device_id: cad92a3bab9440cf8710c378c80ad6a7
+    domain: switch
+    entity_id: switch.second_floor_bath_exhaust
+    type: is_on
+  action:
+  - device_id: cad92a3bab9440cf8710c378c80ad6a7
+    domain: switch
+    entity_id: switch.second_floor_bath_exhaust
+    type: turn_off

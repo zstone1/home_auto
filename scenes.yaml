@@ -5,6 +5,27 @@
       friendly_name: Living Room Lights
       state: 'off'
       supported_features: 1
+    switch.bedroom_closet:
+      friendly_name: Bedroom Closet
+      state: 'off'
     switch.bedroom_lamp:
       friendly_name: bedroom lamp
+      state: 'off'
+    switch.first_floor_bath_light:
+      friendly_name: First Floor Bath Light
+      state: 'off'
+    switch.office_closet:
+      friendly_name: Office Closet
+      state: 'off'
+    switch.office_light:
+      friendly_name: Office Light
+      state: 'off'
+    switch.second_floor_bath_light:
+      friendly_name: Second Floor Bath Light
+      state: 'off'
+    switch.stair_closet:
+      friendly_name: Stair Closet
+      state: 'off'
+    switch.stairs:
+      friendly_name: Stairs
       state: 'off'

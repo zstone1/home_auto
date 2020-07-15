@@ -13,6 +13,16 @@ views:
           - entity: input_boolean.bedtime
           - type: custom:slider-entity-row
             entity: light.living_room_lights
+          - entity: switch.first_floor_bath_light
+          - entity: switch.first_floor_bath_exhaust
+          - entity: switch.kitchen
+          - entity: switch.stairs
+          - entity: switch.stair_closet
+          - entity: switch.second_floor_bath_light
+          - entity: switch.second_floor_bath_exhaust
+          - entity: switch.bedroom_closet
+          - entity: switch.office_closet
+          - entity: switch.office_light
         title: Switch
         type: entities
       - entity: weather.home
