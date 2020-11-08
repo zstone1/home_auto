@@ -96,21 +96,12 @@
     domain: switch
     entity_id: switch.bedroom_lamp
     type: turn_on
-- id: '1591453666780'
-  alias: Router Connectivity Failure
-  description: ''
-  trigger:
-  - entity_id: binary_sensor.local
-    from: 'on'
-    platform: state
-    to: 'off'
-  condition: []
-  action:
-  - data:
-      message: Lost Connection to local router
-      name: Connection Lost
-    entity_id: binary_sensor.local
-    service: logbook.log
+  - delay: 00:20:00
+  - device_id: bfaf6012d1764219ae6a3c865d7d03e6
+    domain: switch
+    entity_id: switch.bedroom_lamp
+    type: turn_off
+  mode: restart
 - id: '1593294703590'
   alias: Leak Detected
   description: ''
@@ -205,11 +196,17 @@
     state: 'off'
   - condition: template
     value_template: '{{ state_attr("sun.sun", "elevation") < 8}}'
-  action:
-  - device_id: a480d205dacb4755900ad0052cdb8c31
+  - condition: device
+    device_id: a480d205dacb4755900ad0052cdb8c31
     domain: light
     entity_id: light.living_room_lights
-    type: turn_off
+    type: is_off
+  action:
+  - brightness_pct: 75
+    device_id: a480d205dacb4755900ad0052cdb8c31
+    domain: light
+    entity_id: light.living_room_lights
+    type: turn_on
 - id: '1593822911752'
   alias: Night Time Living Room Lights
   description: ''
@@ -275,3 +272,86 @@
     domain: switch
     entity_id: switch.second_floor_bath_exhaust
     type: turn_off
+- id: '1595467684775'
+  alias: Stair Closet Lights
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.wyzesense_7782fdc8
+    platform: state
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.wyzesense_7782fdc8
+        state: 'on'
+      sequence:
+      - device_id: de2cc86a02a3484ebc415317d638171c
+        domain: switch
+        entity_id: switch.stair_closet
+        type: turn_on
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.wyzesense_7782fdc8
+        state: 'off'
+      sequence:
+      - device_id: de2cc86a02a3484ebc415317d638171c
+        domain: switch
+        entity_id: switch.stair_closet
+        type: turn_off
+    default:
+    - data:
+        message: what
+        title: no matches
+      service: notify.mobile_app_zphone
+  mode: single
+- id: '1595468075717'
+  alias: Stair Lights Walkup
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.wyzesense_77a65960
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: input_boolean.bedtime
+    state: 'off'
+  action:
+  - device_id: e52bd1e231cf4b19aea6e5f4ac9ab955
+    domain: switch
+    entity_id: switch.stairs
+    type: turn_on
+  - delay: 00:05:00
+  - device_id: e52bd1e231cf4b19aea6e5f4ac9ab955
+    domain: switch
+    entity_id: switch.stairs
+    type: turn_off
+  mode: restart
+- id: '1595468741625'
+  alias: Bedroom Closet Lights
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.wyzesense_77844f1c
+    platform: state
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.wyzesense_77844f1c
+        state: 'on'
+      sequence:
+      - device_id: 591edb6da7274531ad2714bebf325ce4
+        domain: switch
+        entity_id: switch.bedroom_closet
+        type: turn_on
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.wyzesense_77844f1c
+        state: 'off'
+      sequence:
+      - device_id: 591edb6da7274531ad2714bebf325ce4
+        domain: switch
+        entity_id: switch.bedroom_closet
+        type: turn_off
+  mode: single

@@ -19,10 +19,9 @@ binary_sensor:
     count: 2
     scan_interval: 2
   - platform: wyzesense
-    device: "/dev/hidraw0"
-lovelace: 
+    device: auto
+lovelace:
   mode: yaml
-
 logger:
   default: info
   logs:

@@ -34,6 +34,12 @@ views:
           - entity: sensor.kitchen_humidity
           - entity: sensor.bedroom_temperature
           - entity: sensor.bedroom_humidity
+
+      - type: entities
+        title: Vacuums
+        entities:
+          - entity: vacuum.toppy
+          - entity: vacuum.botty
     title: Home
   - badges: []
     cards:
@@ -218,3 +224,7 @@ resources:
     url: /hacsfiles/lovelace-slider-entity-row/slider-entity-row.js
   - type: module 
     url: /hacsfiles/button-card/button-card.js
+  - url: /hacsfiles/vacuum-card/vacuum-card.js
+    type: module
+  - url: /hacsfiles/scheduler-card/scheduler-card.js
+    type: module
