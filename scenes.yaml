@@ -3,8 +3,8 @@
   entities:
     light.living_room_lights:
       friendly_name: Living Room Lights
-      state: 'off'
       supported_features: 1
+      state: 'off'
     switch.bedroom_closet:
       friendly_name: Bedroom Closet
       state: 'off'
@@ -28,4 +28,7 @@
       state: 'off'
     switch.stairs:
       friendly_name: Stairs
+      state: 'off'
+    switch.desk_lamp:
+      friendly_name: Desk Lamp
       state: 'off'

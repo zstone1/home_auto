@@ -85,6 +85,9 @@
   - payload: detected
     platform: mqtt
     topic: /home/wilson/pir
+  - platform: state
+    entity_id: binary_sensor.wyzesense_77a63fb2
+    to: 'on'
   condition:
   - condition: template
     value_template: '{{ state_attr("sun.sun", "elevation") < 8 }}'
@@ -159,10 +162,12 @@
   condition: []
   action:
   - scene: scene.bedtime
-  - data:
-      preset_mode: Sleep
-    entity_id: climate.my_ecobee
-    service: climate.set_preset_mode
+  - service: climate.set_temperature
+    data:
+      temperature: 69
+    target:
+      entity_id: climate.my_ecobee
+  mode: single
 - id: '1593577167509'
   alias: Woken Up
   description: Turns off bedtime when I'm using my phone
@@ -179,10 +184,12 @@
   - data: {}
     entity_id: input_boolean.bedtime
     service: input_boolean.turn_off
-  - data:
-      preset_mode: Home
-    entity_id: climate.my_ecobee
-    service: climate.set_preset_mode
+  - service: climate.set_temperature
+    data:
+      temperature: 70
+    target:
+      entity_id: climate.my_ecobee
+  mode: single
 - id: '1593822612999'
   alias: Evening Living Room Lights
   description: ''
@@ -233,7 +240,7 @@
     entity_id: switch.first_floor_bath_light
     for:
       hours: 0
-      minutes: 10
+      minutes: 30
       seconds: 0
     platform: device
     type: turned_off
@@ -248,6 +255,7 @@
     domain: switch
     entity_id: switch.first_floor_bath_exhaust
     type: turn_off
+  mode: single
 - id: '1594411595486'
   alias: Second Floor Exhaust Shutoff
   description: Turns off the bathroom exhaust on a timer fans when the lights go off.
@@ -257,7 +265,7 @@
     entity_id: switch.second_floor_bath_light
     for:
       hours: 0
-      minutes: 10
+      minutes: 30
       seconds: 0
     platform: device
     type: turned_off
@@ -272,6 +280,7 @@
     domain: switch
     entity_id: switch.second_floor_bath_exhaust
     type: turn_off
+  mode: single
 - id: '1595467684775'
   alias: Stair Closet Lights
   description: ''
@@ -354,4 +363,60 @@
         domain: switch
         entity_id: switch.bedroom_closet
         type: turn_off
+  mode: single
+- id: '1605377582508'
+  alias: First Floor Bath Lights
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.wyzesense_77830aba
+  condition:
+  - condition: state
+    entity_id: input_boolean.bedtime
+    state: 'off'
+  action:
+  - choose:
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: state
+          entity_id: binary_sensor.wyzesense_77830aba
+          state: 'on'
+      sequence:
+      - type: toggle
+        device_id: 88329ae2c1bc4da0a2062a973ab06aaf
+        entity_id: switch.first_floor_bath_light
+        domain: switch
+    default: []
+  mode: single
+- id: '1605384862692'
+  alias: Botty Door Warning
+  description: ''
+  trigger:
+  - platform: time_pattern
+    minutes: /10
+  condition:
+  - condition: template
+    value_template: '{{ ((as_timestamp(state_attr(''switch.schedule_1f4c04'', ''next_trigger''))
+      | int) - (now().timestamp() | int))/60 <= 30}}'
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.wyzesense_7782fdc8
+      state: 'on'
+    - condition: state
+      entity_id: binary_sensor.wyzesense_77830aba
+      state: 'off'
+  - condition: state
+    entity_id: input_boolean.disable_vacuums
+    state: 'off'
+  action:
+  - data_template:
+      message: '{% if is_state(''binary_sensor.wyzesense_77830aba'',''off'')%} Bathroom
+        door is closed. {% endif %} {% if is_state(''binary_sensor.wyzesense_7782fdc8'',''on'')%}
+        Closet door is open.  {% endif %}
+
+        '
+      title: Botty Door Warning
+    service: notify.mobile_app_zphone
   mode: single
