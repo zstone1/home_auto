@@ -1,0 +1,29 @@
+discovery: true
+switch:
+  #stairs
+  - host: '192.168.50.252'
+  # office closet
+  - host: '192.168.50.40'
+  # stair closet
+  - host: '192.168.50.94'
+  # kitchen
+  - host: '192.168.50.150'
+  # bedroom closet
+  - host: '192.168.50.194'
+  # first floor bathroom light
+  - host: '192.168.50.35'
+  # second floor bathroom light
+  - host: '192.168.50.116'
+  # second floor bathroom exhaust
+  - host: '192.168.50.18'
+  # office light
+  - host: '192.168.50.225'
+  # first floor bathroom exhaust
+  - host: '192.168.50.16'
+  # bedroom lamp
+  - host: '192.168.50.226'
+  # bedroom standing lamp
+  - host: '192.168.50.105'
+light: 
+  # living room lights
+  - host: '192.168.50.214'

@@ -12,6 +12,7 @@ script: !include scripts.yaml
 scene: !include scenes.yaml
 python_script:
 sensor: !include sensors.yaml
+tplink: !include tplink.yaml
 binary_sensor:
   - platform: ping
     name: local_router_connectivity
